@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	model_task "github.com/sebasblancogonz/model/task"
+	model_task "github.com/sebasblancogonz/todo_app/pkg/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sebasblancogonz/todo_app/config"
