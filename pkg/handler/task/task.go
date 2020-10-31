@@ -28,13 +28,13 @@ func MongoConfig() *mgo.Database {
 func GetAllTasks(c *gin.Context) {
 	db := *MongoConfig()
 
-	tasks := model_todo.Tasks{}
+	tasks := model_task.Tasks{}
 
 	err := db.C(TaskCollection).Find(bson.M{}).All(&tasks)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Error fetching all taskss",
+			"message": "Error fetching all tasks",
 		})
 		return
 	}
@@ -44,4 +44,24 @@ func GetAllTasks(c *gin.Context) {
 	})
 }
 
-func GetPen
+//GetTasksByStatus will return tasks given a status
+func GetTasksByStatus(c *gin.Context) {
+	db := *MongoConfig()
+
+	status := c.Param("status")
+
+	tasks := model_task.Tasks{}
+
+	err := db.C(TaskCollection).Find(bson.M{"status": &status})
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Error fetching tasks by status",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"tasks": &tasks,
+	})
+}
