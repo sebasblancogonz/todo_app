@@ -15,9 +15,9 @@ func (c Routes) StartGin() {
 	api := r.Group("/api")
 	{
 		api.GET("/")
-		api.GET("/todos")
-		api.GET("/todos/todo")
-		api.POST("/todos/todo")
+		api.GET("/tasks")
+		api.GET("/tasks/task")
+		api.POST("/tasks/task")
 	}
 
 	r.Run(":8000")
