@@ -3,11 +3,12 @@ package task
 import (
 	"log"
 	"net/http"
-
-	model_task "github.com/sebasblancogonz/todo_app/pkg/model"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sebasblancogonz/todo_app/config"
+	model_task "github.com/sebasblancogonz/todo_app/pkg/model"
+	status "/github.com/sebasblancogonz/todo_app/pkg/status"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -63,5 +64,42 @@ func GetTasksByStatus(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"tasks": &tasks,
+	})
+}
+
+//CreateTask will create a new task
+func CreateTask(c *gin.Context) {
+	db := *MongoConfig()
+
+	println(db.Name)
+
+	task := model_task.Task{}
+
+	err := c.Bind(&task)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Error getting request body",
+			"error":   err,
+		})
+		return
+	}
+
+	var todoStatus status.Enum.todo
+	task.Status = todoStatus
+	task.CreatedAt = time.Now()
+	task.UpdatedAt = time.Now()
+
+	err = db.C(TaskCollection).Insert(task)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Something went wrong creating a new task",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Task created successfuly",
+		"task":    &task,
 	})
 }

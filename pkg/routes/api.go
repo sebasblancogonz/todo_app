@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sebasblancogonz/todo_app/pkg/handler/task"
 )
 
 //Routes struct
@@ -14,10 +15,10 @@ func (c Routes) StartGin() {
 	r := gin.Default()
 	api := r.Group("/api")
 	{
-		api.GET("/")
-		api.GET("/tasks")
+		api.GET("/", welcome)
+		api.GET("/tasks", task.GetAllTasks)
 		api.GET("/tasks/task")
-		api.POST("/tasks/task")
+		api.POST("/tasks/task", task.CreateTask)
 	}
 
 	r.Run(":8000")
