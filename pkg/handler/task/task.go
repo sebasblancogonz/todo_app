@@ -8,9 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sebasblancogonz/todo_app/config"
 	model_task "github.com/sebasblancogonz/todo_app/pkg/model"
-	status "/github.com/sebasblancogonz/todo_app/pkg/status"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+)
+
+const (
+	todo       = "TODO"
+	inProgress = "IN_PROGRESS"
+	done       = "DONE"
 )
 
 //TaskCollection static collection
@@ -85,8 +90,8 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 
-	var todoStatus status.Enum.todo
-	task.Status = todoStatus
+	task.Status = todo
+	task.ID = bson.NewObjectId()
 	task.CreatedAt = time.Now()
 	task.UpdatedAt = time.Now()
 

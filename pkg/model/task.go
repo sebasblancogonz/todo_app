@@ -3,15 +3,15 @@ package model
 import (
 	"time"
 
-	status "github.com/sebasblancogonz/todo_app/pkg/status"
+	"gopkg.in/mgo.v2/bson"
 )
 
 //Task struct
 type Task struct {
-	ID          string        `bson:"id"`
+	ID          bson.ObjectId `bson:"_id"`
 	Title       string        `bson:"title"`
 	Description string        `bson:"description"`
-	Status      status.Status `bson:"status"`
+	Status      string        `bson:"status"`
 	CreatedAt   time.Time     `bson:"created_at"`
 	UpdatedAt   time.Time     `bson:"updated_at"`
 }
