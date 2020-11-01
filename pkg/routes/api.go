@@ -10,15 +10,21 @@ import (
 //Routes struct
 type Routes struct{}
 
+const (
+	tasksResource = "/tasks"
+	taskResource  = tasksResource + "/task"
+)
+
 //StartGin will start the server
 func (c Routes) StartGin() {
 	r := gin.Default()
 	api := r.Group("/api")
 	{
 		api.GET("/", welcome)
-		api.GET("/tasks", task.GetAllTasks)
-		api.GET("/tasks/task")
-		api.POST("/tasks/task", task.CreateTask)
+		api.GET(tasksResource, task.GetAllTasks)
+		api.GET(taskResource, task.GetTasksByStatus)
+		api.POST(taskResource, task.CreateTask)
+		api.PATCH(taskResource)
 	}
 
 	r.Run(":8000")

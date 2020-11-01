@@ -58,6 +58,8 @@ func GetTasksByStatus(c *gin.Context) {
 
 	tasks := model_task.Tasks{}
 
+	println(status)
+
 	err := db.C(TaskCollection).Find(bson.M{"status": &status})
 
 	if err != nil {
@@ -107,4 +109,8 @@ func CreateTask(c *gin.Context) {
 		"message": "Task created successfuly",
 		"task":    &task,
 	})
+}
+
+func UpdateTaskStatus(c *gin.Context) {
+
 }
