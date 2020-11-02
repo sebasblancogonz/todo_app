@@ -21,7 +21,7 @@ func (c Routes) StartGin() {
 	api := r.Group("/api")
 	{
 		api.GET("/", welcome)
-		api.GET(tasksResource, task.GetAllTasks)
+		api.GET(tasksResource, task.GetTasks)
 		api.POST(taskResource, task.CreateTask)
 		api.PATCH(taskResource)
 	}
