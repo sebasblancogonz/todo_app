@@ -3,6 +3,7 @@ package task
 import (
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -34,6 +35,13 @@ func MongoConfig() *mgo.Database {
 func GetAllTasks(c *gin.Context) {
 	db := *MongoConfig()
 
+	status := strings.ToUpper(c.Query("status"))
+
+	if status != "" {
+		println(status)
+		getTasksByStatus(c, status, &db)
+	}
+
 	tasks := model_task.Tasks{}
 
 	err := db.C(TaskCollection).Find(bson.M{}).All(&tasks)
@@ -50,17 +58,11 @@ func GetAllTasks(c *gin.Context) {
 	})
 }
 
-//GetTasksByStatus will return tasks given a status
-func GetTasksByStatus(c *gin.Context) {
-	db := *MongoConfig()
-
-	status := c.Param("status")
+func getTasksByStatus(c *gin.Context, status string, db *mgo.Database) {
 
 	tasks := model_task.Tasks{}
 
-	println(status)
-
-	err := db.C(TaskCollection).Find(bson.M{"status": &status})
+	err := db.C(TaskCollection).Find(bson.M{"status": &status}).All(&tasks)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -111,6 +113,7 @@ func CreateTask(c *gin.Context) {
 	})
 }
 
+//UpdateTaskStatus will update a task
 func UpdateTaskStatus(c *gin.Context) {
 
 }

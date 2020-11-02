@@ -22,7 +22,6 @@ func (c Routes) StartGin() {
 	{
 		api.GET("/", welcome)
 		api.GET(tasksResource, task.GetAllTasks)
-		api.GET(taskResource, task.GetTasksByStatus)
 		api.POST(taskResource, task.CreateTask)
 		api.PATCH(taskResource)
 	}
