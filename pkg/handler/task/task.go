@@ -31,7 +31,32 @@ func MongoConfig() *mgo.Database {
 	return db
 }
 
-//GetAllTasks will return all tasks
+func getAllTaks(c *gin.Context, db *mgo.Database) (model_task.Tasks, error) {
+	tasks := model_task.Tasks{}
+
+	err := db.C(TaskCollection).Find(bson.M{}).All(&tasks)
+
+	if err != nil {
+		return tasks, err
+	}
+
+	return tasks, nil
+}
+
+func getTasksByStatus(c *gin.Context, status string, db *mgo.Database) (model_task.Tasks, error) {
+
+	tasks := model_task.Tasks{}
+
+	err := db.C(TaskCollection).Find(bson.M{"status": &status}).All(&tasks)
+
+	if err != nil {
+		return tasks, err
+	}
+
+	return tasks, nil
+}
+
+//GetTasks will return all tasks
 func GetTasks(c *gin.Context) {
 	db := *MongoConfig()
 
@@ -39,21 +64,19 @@ func GetTasks(c *gin.Context) {
 
 	tasks := model_task.Tasks{}
 
-	err := error
+	var err error
 
 	if status != "" {
-		println(status)
-		err, tasks = getTasksByStatus(c, status, &db)
+		tasks, err = getTasksByStatus(c, status, &db)
 	} else {
-		err, tasks = getAllTaks(c, &db)
+		tasks, err = getAllTaks(c, &db)
 	}
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"status": 500,
-			"message": "Something went wrong",
+			"message": "Error fetching tasks",
 		})
-	} 
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"tasks": &tasks,
@@ -61,42 +84,42 @@ func GetTasks(c *gin.Context) {
 
 }
 
-func getAllTaks(c *gin.Context, db *mgo.Database) err Error, model_task.Tasks {
-	tasks := model_task.Tasks{}
+//UpdateTaskStatus will update a task
+func UpdateTaskStatus(c *gin.Context) {
+	db := *MongoConfig()
 
-	err := db.C(TaskCollection).Find(bson.M{}).All(&tasks)
+	taskId := c.Query("taskId")
 
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Error fetching all tasks",
+	task := model_task.Task{}
+
+	err := c.Bind(&task)
+
+	if taskId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Query string \"taskId\" is missing on the url",
 		})
-		return tasks
+		return
 	}
 
-	return tasks
-}
-
-func getTasksByStatus(c *gin.Context, status string, db *mgo.Database) err Error, model_task.Tasks {
-
-	tasks := model_task.Tasks{}
-
-	err := db.C(TaskCollection).Find(bson.M{"status": &status}).All(&tasks)
-
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Error fetching tasks by status",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid body format",
 		})
-		return tasks
+		return
 	}
 
-	return tasks
+	err = db.C(TaskCollection).Update(bson.M{"_id": taskId}, bson.M{"status": task.Status})
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Task updated successfuly",
+		"task":    &task,
+	})
+
 }
 
 //CreateTask will create a new task
 func CreateTask(c *gin.Context) {
 	db := *MongoConfig()
-
-	println(db.Name)
 
 	task := model_task.Task{}
 
@@ -127,9 +150,4 @@ func CreateTask(c *gin.Context) {
 		"message": "Task created successfuly",
 		"task":    &task,
 	})
-}
-
-//UpdateTaskStatus will update a task
-func UpdateTaskStatus(c *gin.Context) {
-
 }

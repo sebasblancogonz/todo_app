@@ -23,7 +23,7 @@ func (c Routes) StartGin() {
 		api.GET("/", welcome)
 		api.GET(tasksResource, task.GetTasks)
 		api.POST(taskResource, task.CreateTask)
-		api.PATCH(taskResource)
+		api.PATCH(taskResource, task.UpdateTaskStatus)
 	}
 
 	r.Run(":8000")
