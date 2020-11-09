@@ -91,7 +91,34 @@ func GetTasks(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"tasks": &tasks,
 	})
+}
 
+//GetTask will return an specific task
+func GetTask(c *gin.Context) {
+	db := *MongoConfig()
+
+	taskID := c.Query("taskId")
+
+	if taskID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Query string \"taskId\" is missing on the url",
+		})
+		return
+	}
+
+	task := model_task.Task{}
+
+	err := db.C(TaskCollection).FindId(bson.ObjectIdHex(taskID)).One(&task)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Something happened",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, &task)
 }
 
 //UpdateTaskStatus will update a task
@@ -129,6 +156,14 @@ func UpdateTaskStatus(c *gin.Context) {
 
 	err = db.C(TaskCollection).UpdateId(task.ID, newData)
 
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Something happened",
+			"error":   err,
+		})
+		return
+	}
+
 	err = db.C(TaskCollection).FindId(task.ID).One(&task)
 
 	if err != nil {
@@ -143,7 +178,6 @@ func UpdateTaskStatus(c *gin.Context) {
 		"message": "Task updated successfuly",
 		"task":    &task,
 	})
-
 }
 
 //CreateTask will create a new task
