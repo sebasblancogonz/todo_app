@@ -56,6 +56,16 @@ func getTasksByStatus(c *gin.Context, status string, db *mgo.Database) (model_ta
 	return tasks, nil
 }
 
+func errorResponse(err error, c *gin.Context) {
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Something happened",
+			"error":   err,
+		})
+		return
+	}
+}
+
 //GetTasks will return all tasks
 func GetTasks(c *gin.Context) {
 	db := *MongoConfig()
@@ -88,17 +98,26 @@ func GetTasks(c *gin.Context) {
 func UpdateTaskStatus(c *gin.Context) {
 	db := *MongoConfig()
 
-	taskId := c.Query("taskId")
+	taskID := c.Query("taskId")
 
-	task := model_task.Task{}
-
-	err := c.Bind(&task)
-
-	if taskId == "" {
+	if taskID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Query string \"taskId\" is missing on the url",
 		})
 		return
+	}
+
+	task := model_task.Task{}
+
+	task.ID = bson.ObjectIdHex(taskID)
+
+	err := c.BindJSON(&task)
+
+	newData := bson.M{
+		"$set": bson.M{
+			"status":     task.Status,
+			"updated_at": time.Now(),
+		},
 	}
 
 	if err != nil {
@@ -108,7 +127,17 @@ func UpdateTaskStatus(c *gin.Context) {
 		return
 	}
 
-	err = db.C(TaskCollection).Update(bson.M{"_id": taskId}, bson.M{"status": task.Status})
+	err = db.C(TaskCollection).UpdateId(task.ID, newData)
+
+	err = db.C(TaskCollection).FindId(task.ID).One(&task)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Something happened",
+			"error":   err,
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Task updated successfuly",
