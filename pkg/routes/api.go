@@ -25,6 +25,7 @@ func (c Routes) StartGin() {
 		api.GET(taskResource, task.GetTask)
 		api.POST(taskResource, task.CreateTask)
 		api.PATCH(taskResource, task.UpdateTaskStatus)
+		api.DELETE(taskResource, task.DeleteTask)
 	}
 
 	r.Run(":8000")

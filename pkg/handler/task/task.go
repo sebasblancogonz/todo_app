@@ -214,3 +214,30 @@ func CreateTask(c *gin.Context) {
 		"task":    &task,
 	})
 }
+
+//DeleteTask will delete an specifica task
+func DeleteTask(c *gin.Context) {
+	db := *MongoConfig()
+
+	taskID := c.Query("taskId")
+
+	if taskID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Query string \"taskId\" is missing on the url",
+		})
+	}
+
+	err := db.C(TaskCollection).RemoveId(bson.ObjectIdHex(taskID))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Something happened",
+			"error":   err,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Task deleted successfuly",
+	})
+
+}
