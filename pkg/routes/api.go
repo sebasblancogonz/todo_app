@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sebasblancogonz/todo_app/pkg/handler/task"
 )
@@ -18,6 +19,13 @@ const (
 //StartGin will start the server
 func (c Routes) StartGin() {
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"PUT", "PATCH", "POST", "GET", "DELETE"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 	api := r.Group("/api")
 	{
 		api.GET("/", welcome)
