@@ -1,0 +1,181 @@
+*,
+*:after,
+*:before {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  transition: all 800ms ease;
+}
+
+body {
+  background-color: rgba(224, 224, 224, 0.5);
+  font-family: Helvetica, sans-serif;
+}
+
+.my-nav{
+  background-color: #ffffff;
+  border-bottom: 2px solid rgb(207, 201, 201);
+}
+
+.my-nav a{
+  color: #bebebe;
+}
+
+.divider {
+  height: 25px;
+  transition: all 800ms ease;
+}
+
+.tasks{
+  display: table;
+  width: 80%;
+  margin: 0 auto;
+}
+.wrap-registerForm {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.registerForm {
+  width: 40%;
+  background-color: #fff;
+  padding: 20px 60px 40px 60px;
+  box-shadow: -20px 22px 20px -16px rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.formLegend {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-height: 22.5px;
+  text-transform: none;
+}
+
+.wrap-taskForm {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.taskForm {
+  width: 60%;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 2px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.noTodos{
+  margin: 0 auto;
+}
+
+
+.wrap-task {
+  background-color: white;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.19);
+  margin-top: 20px;
+  border-radius: 3px;
+  border: 1px solid #bebebe
+}
+
+#progress{
+  width: 40%;
+  margin: 22px auto 0 auto;
+  animation: 1.5s fadeIn;
+}
+
+@keyframes fadeIn {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+}
+@keyframes fadeOut{
+  100% {
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+}
+
+.taskTitle{
+  padding: 20px 0 0 35px;
+}
+
+.taskDesc{
+  padding: 0 20px 10px 35px;
+}
+
+.taskDesc p{
+  color: #afafaf;
+  font-weight: 500;
+}
+
+.dot{
+  margin-left: 30px;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #bebebe;
+  vertical-align: middle;
+  -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg);
+}
+
+
+.success{
+  background-color: rgb(112, 200, 184);
+  border: none;
+}
+
+.checkmark{
+  content: " ";
+  display: block;
+  width: 0.5em;
+  height: 1em;
+  border: solid white;
+  border-width: 0 0.2em 0.2em 0;
+  position: absolute;
+  left: .9em;
+  top: 25%;
+}
+
+.task{
+    margin-left: -10px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.icons{
+  margin: 20px 20px 20px 0;
+  float: right;
+}
+
+.icons i{
+  cursor: pointer;
+}
