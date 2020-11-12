@@ -28,14 +28,14 @@ class AddTask extends Component {
       description,
     }
 
+    console.log(task)
+
     this.setState({
       title: '',
       description: '',
     })
-    return axios
-      .post('http://localhost:8000/api/tasks/task', {
-        task,
-      })
+    return axios.post('http://localhost:8000/api/tasks/task', 
+        task)
       .then(res => {
         if (res.data.error) return console.warn(res.data.error)
         addTask(res.data.taskSaved)
