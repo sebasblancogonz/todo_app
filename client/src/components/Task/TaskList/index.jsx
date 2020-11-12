@@ -66,7 +66,7 @@ export class TaskList extends Component {
         {tasks &&
           tasks.map(task => {
             return (
-              <TaskElement
+              <TaskElement key={task.ID}
                 last={true}
                 {...task}
                 onDelete={this.handleDelete}
