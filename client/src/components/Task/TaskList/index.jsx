@@ -37,10 +37,18 @@ export class TaskList extends Component {
 
   handleToggle(task) {
     const { toggleTask } = this.props
-    if (task.completed) return null
+    if (task.Status == "DONE") return null
+    if (task.Status == "TODO") {
     axios
-      .put(`http://localhost:8000/api/tasks/task?taskId=${task._id}`)
-      .then(() => this.updateList(), toggleTask(task._id))
+      .patch(`http://localhost:8000/api/tasks/task?taskId=${task.ID}`, {"status": "IN_PROGRESS"})
+      .then(() => this.updateList(), toggleTask(task.ID))
+    }
+    if (task.Status == "IN_PROGRESS") {
+      axios
+      .patch(`http://localhost:8000/api/tasks/task?taskId=${task.ID}`, {"status": "DONE"})
+      .then(() => this.updateList(), toggleTask(task.ID))
+    }
+    
   }
 
   handleDelete(id) {

@@ -11,7 +11,7 @@ const tasks = (state = [], action) => {
       return [...state.filter(task => task._id !== action.id)]
     case constants.TOGGLE_TASK:
       return state.map(task =>
-        task._id === action._id ? { ...task, completed: !task.completed } : task
+        task._id === action._id ? { ...task, status: !task.status } : task
       )
     case constants.GET_TASKS:
       return { ...state, tasks: action.json }

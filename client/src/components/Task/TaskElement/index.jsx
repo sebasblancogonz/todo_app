@@ -24,7 +24,7 @@ class TaskElement extends Component {
   render() {
     const task = this.props
     return (
-      <div key={task._id} className="wrap-task">
+      <div key={task.ID} className="wrap-task">
         <div className="task">
           <div className="taskTitle">
             <div className="title">
@@ -48,7 +48,7 @@ class TaskElement extends Component {
           <i
             className="fa fa-trash"
             aria-hidden="true"
-            onClick={() => this.props.onDelete(task._id)}
+            onClick={() => this.props.onDelete(task.ID)}
           ></i>
         </div>
       </div>

@@ -24,8 +24,8 @@ class AddTask extends Component {
 
 
     const task = {
-      title,
-      description,
+      Title: title,
+      Description: description,
     }
 
     console.log(task)
