@@ -25,18 +25,17 @@ class TaskElement extends Component {
     const task = this.props
     return (
       <div key={task._id} className="wrap-task">
-        <div className={'dot ' + (task && task.completed ? 'success' : '')}>
-          {this.checkMark(task.completed)}
-        </div>
-
         <div className="task">
           <div className="taskTitle">
             <div className="title">
-              <h2>{task.title}</h2>
+              <h2>{task.Title}</h2>
             </div>
           </div>
           <div className="taskDesc">
-            <p>{task.description}</p>
+            <p>{task.Description}</p>
+          </div>
+          <div className="taskDesc">
+            <p>{task.Status}</p>
           </div>
         </div>
         <div className="icons">

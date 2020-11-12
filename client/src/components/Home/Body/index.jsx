@@ -11,7 +11,7 @@ class Home extends Component {
     return (
       <Fragment>
         <Header />
-        <div className="todos">
+        <div className="tasks">
           <AddTask/>
           <TaskList/>
         </div>

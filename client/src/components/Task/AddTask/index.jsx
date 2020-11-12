@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { TextField, Button } from '@material-ui/core'
 import axios from 'axios'
 
-class AddTodo extends Component {
+class AddTask extends Component {
   constructor(props) {
     super(props)
 
@@ -19,7 +19,7 @@ class AddTodo extends Component {
 
   async handleSubmit(e) {
     e.preventDefault()
-    const { addTodo } = this.props
+    const { addTask } = this.props
     const { title, description } = this.state
 
 
@@ -38,7 +38,7 @@ class AddTodo extends Component {
       })
       .then(res => {
         if (res.data.error) return console.warn(res.data.error)
-        addTodo(res.data.taskSaved)
+        addTask(res.data.taskSaved)
       })
   }
 
@@ -94,7 +94,7 @@ class AddTodo extends Component {
 
 const mapDispatchToProps = dispatch => ({
   onChange: task => dispatch({ type: constants.ON_CHANGE, task }),
-  addTodo: task => dispatch({ type: constants.ADD_TASK, task }),
+  addTask: task => dispatch({ type: constants.ADD_TASK, task }),
 })
 
 const mapStateToProps = state => ({
@@ -104,4 +104,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddTodo)
+)(AddTask)
